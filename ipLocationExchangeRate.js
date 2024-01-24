@@ -172,22 +172,24 @@ async function getCurrencyNames() {
 
 function sortObj(obj) {
     return Object.keys(obj).sort().reduce(function (result, key) {
-        // If userCurrency is set, only return specific currency data.
-        if (userCurrency) {
+        // If userCurrency is set and it is a valid currency, only return specific currency data.
+        if (userCurrency && currencyData[userCurrency] !== undefined) {
             if (key == userCurrency) {
                 result[key] = obj[key];
             }
         } else {
             result[key] = obj[key];
         }
+
         return result;
     }, {});
 }
 
 async function main(request) {
-    // Optional field, currently no sanity checks to make sure its valid.
+    // Optional field, sanity check exists in sortObj function.
     if (request.currency) {
-        userCurrency = request.currency;
+        // Convert currency to uppercase.
+        userCurrency = request.currency.toUpperCase();
     }
     // Mandatory field and use regex to confirm the IP is in the correct format.
     if (request.ip && regexExp.test(request.ip)) {
@@ -221,6 +223,9 @@ async function main(request) {
                 responseObject.body = {};
                 responseObject.body.currency = geolocationData.currency;
                 responseObject.body.currency_code = geolocationData.currency_code;
+                if (currencyData[userCurrency] === undefined) {
+                    responseObject.body.requested_currency = userCurrency + ' can not be found.';
+                }
                 responseObject.body.exchange_data = sortedCurrencyData;
             } else {
                 responseObject.code = 400;
