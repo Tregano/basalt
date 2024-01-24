@@ -1,0 +1,17 @@
+{
+  "name": "ip-location-exchange",
+  "version": "1.0.0",
+  "description": "Using a provided IP, finds the location and produces a list of the current exchange rate.",
+  "main": "ipLocationExchangeRate.js",
+  "scripts": {
+    "test": "node ipLocationExchangeRate.js -i 102.39.206.186"
+  },
+  "author": "Tregano King",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.6.5",
+    "commander": "^8.2.0",
+    "program": "^1.0.0"
+  },
+  "devDependencies": {}
+}
